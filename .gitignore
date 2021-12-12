@@ -1,0 +1,7 @@
+# Folders
+/tmp
+
+# Files
+*.log
+.DS_Store
+.env
