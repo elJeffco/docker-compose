@@ -6,7 +6,7 @@ All used Docker Compose files are stored in this Github repo. Note that the file
 ### Port categorization
 ```bash
 9000-9019: Management services like Portainer
-9020-9050: Fixed application that willa always run like Uptime Kuma and MongoDB
+9020-9050: Fixed application that will always run like Uptime Kuma and MongoDB
 9050-9099: Testing ports for random applications
 ```
 
