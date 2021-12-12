@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: wikijs_db
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_DB: wikijs
+      POSTGRES_PASSWORD: dfX>6=F4;(V\=DTn
+      POSTGRES_USER: wikijs
+    volumes:
+      - data:/var/lib/postgresql/data
+
+  wiki:
+    container_name: wikijs_app
+    image: requarks/wiki:2
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: wikijs
+      DB_PASS: dfX>6=F4;(V\=DTn
+      DB_NAME: wikijs
+    ports:
+      - 9023:3000
+
+volumes:
+  data:
