@@ -24,7 +24,12 @@ services:
       DB_PASS: dfX>6=F4;(V\=DTn
       DB_NAME: wikijs
     ports:
-      - 9023:3000
+      - 9024:3000
 
 volumes:
   data:
+
+networks:
+  default:
+    external:
+      name: nginxproxymanager

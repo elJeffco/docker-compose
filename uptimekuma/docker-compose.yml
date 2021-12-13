@@ -5,9 +5,14 @@ services:
     container_name: uptimekuma
     image: louislam/uptime-kuma:latest
     ports:
-      - 9020:3001
+      - 9021:3001
     volumes:
       - data:/app/data
 
 volumes:
   data:
+
+networks:
+  default:
+    external:
+      name: nginxproxymanager

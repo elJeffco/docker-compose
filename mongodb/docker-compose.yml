@@ -8,9 +8,14 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: development
     ports:
-      - 9021:27017
+      - 9023:27017
     volumes:
       - data:/data/db
 
 volumes:
   data:
+
+networks:
+  default:
+    external:
+      name: nginxproxymanager

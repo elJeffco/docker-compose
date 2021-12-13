@@ -13,3 +13,8 @@ services:
 
 volumes:
   data:
+
+networks:
+  default:
+    external:
+      name: nginxproxymanager
