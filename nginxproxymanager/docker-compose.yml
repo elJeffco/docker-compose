@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  npm:
+    container_name: nginxproxymanager
+    image: jc21/nginx-proxy-manager:latest
+    ports:
+      - 80:80
+      - 443:443
+      - 9020:81
+    volumes:
+      - data:/data
+      - letsencrypt:/etc/letsencrypt
+
+volumes:
+  data:
+  letsencrypt:
+
+networks:
+  default:
+    external:
+      name: nginxproxymanager
