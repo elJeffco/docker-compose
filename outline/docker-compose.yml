@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: outline_db
+    image: postgres
+    environment:
+      POSTGRES_USER: outline
+      POSTGRES_PASSWORD: 2Ba`Q=<$=^=nGGX%
+      POSTGRES_DB: outline
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
+    
+  outline:
+    container_name: outline_app
+    image: outlinewiki/outline:latest
+    environment:
+      - DATABASE_URL=postgres://outline:2Ba`Q=<$=^=nGGX%@postgres:5432/outline
+      - DATABASE_URL_TEST=postgres://outline:2Ba`Q=<$=^=nGGX%@postgres:5432/outline-test
+    ports:
+      - 9050:80
+      - 9051:443
+
+volumes:
+  data:
