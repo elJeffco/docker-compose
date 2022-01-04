@@ -1,5 +1,5 @@
 # Docker Compose Files
-Custom Docker Compose files from 
+Custom Docker Compose files, build to my preference, for personally used self-hosted applications. 
 
 ### Port categorization
 ```bash
