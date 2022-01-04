@@ -1,21 +1,36 @@
 # Docker Compose Files
-All used Docker Compose files are stored in this Github repo. Note that the files are stored in `/srv` on the Ubuntu server.
-
-## Ports
+Custom Docker Compose files from 
 
 ### Port categorization
 ```bash
 9000-9019: Management services like Portainer
-9020-9050: Fixed application that will always run like Uptime Kuma and MongoDB
+9020-9050: Fixed application that will always run like Uptime Kuma
 9050-9099: Testing ports for random applications
 ```
 
-### Applications
-```bash
-9000: Portainer
+### Default template
+```yml
+version: "3.8"
 
-9020: Uptime Kuma
-9021: MongoDB
-9022: Jenkins
-9023: WikiJS
+services:
+  service-type:
+    container_name: service-type
+    image: image:latest
+    command: 
+    depends_on:
+      - other_service
+    ports: 
+      - 1000:1000
+    environment:
+      NAME: value
+    volumes: 
+      - data:/var/lib
+    
+volumes:
+  data: 
+
+networks:
+  default:
+    external:
+      name: nginxproxymanager
 ```
