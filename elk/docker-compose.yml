@@ -16,8 +16,6 @@ services:
             ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
             LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
             KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-        networks:
-            - elk
 
     elasticsearch:
         container_name: elk_elasticsearch
