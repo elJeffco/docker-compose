@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+    # Initiziler container to setup basic services user
+    # Once setup, this container doesn't do anything
+    setup:
+        container_name: elk_setup
+        build:
+            context: setup/
+            args:
+                ELASTIC_VERSION: ${ELASTIC_VERSION}
+        init: true
+        volumes:
+            - setup:/state:Z
+        environment:
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+            LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+            KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+        networks:
+            - elk
+
+    elasticsearch:
+        container_name: elk_elasticsearch
+        build:
+            context: elasticsearch/
+            args:
+                ELASTIC_VERSION: ${ELASTIC_VERSION}
+        volumes:
+            - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+            - elasticsearch:/usr/share/elasticsearch/data:z
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        environment:
+            ES_JAVA_OPTS: -Xmx256m -Xms256m
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+            discovery.type: single-node
+
+    logstash:
+        container_name: elk_logstash
+        build:
+            context: logstash/
+            args:
+                ELASTIC_VERSION: ${ELASTIC_VERSION}
+        volumes:
+            - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+            - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+        ports:
+            - "5044:5044"
+            - "5000:5000/tcp"
+            - "5000:5000/udp"
+            - "9600:9600"
+        environment:
+            LS_JAVA_OPTS: -Xmx256m -Xms256m
+            LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+        depends_on:
+            - elasticsearch
+
+    kibana:
+        container_name: elk_kibana
+        build:
+            context: kibana/
+            args:
+                ELASTIC_VERSION: ${ELASTIC_VERSION}
+        volumes:
+            - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+        ports:
+            - "5601:5601"
+        environment:
+            KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+        depends_on:
+            - elasticsearch
+    
+    metricbeat:
+        container_name: elk_metricbeat
+        build:
+            context: metricbeat/
+            args:
+                ELASTIC_VERSION: ${ELASTIC_VERSION}
+
+volumes:
+    setup:
+    elasticsearch:
+
+networks:
+    default:
+        external:
+            name: nginxproxymanager
