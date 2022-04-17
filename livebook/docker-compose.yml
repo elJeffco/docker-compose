@@ -1,0 +1,19 @@
+version: '3.8' 
+
+services:
+    livebook:
+        container_name: livebook
+        image: livebook/livebook
+        ports:
+            - 9060:8080
+            - 9061:8081
+        environment:
+            - LIVEBOOK_APP_SERVICE_URL='https://livebook.elpatron.dev'
+            - LIVEBOOK_PASSWORD=!!MIN_CHAR_16!!
+            - LIVEBOOK_SECRET_KEY_BASE=!!MIN_CHAR_64!!
+        volumes:
+            - ./data:/data
+
+networks:
+  default:
+    name: default_network
