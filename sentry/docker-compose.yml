@@ -1,0 +1,66 @@
+version: '3.8' # based on: https://bl.ocks.org/denji/b801f19d95b7d7910982c22bb1478f96
+
+services:
+    redis:
+        container_name: sentry-redis
+        image: redis
+
+    postgres:
+        container_name: sentry-postgres
+        image: postgres
+        environment:
+            POSTGRES_USER: sentry
+            POSTGRES_PASSWORD: sentry
+            POSTGRES_DB: sentry
+        volumes:
+            - pgdb:/var/lib/postgresql/data
+
+    sentry:
+        container_name: sentry-app
+        image: sentry
+        links:
+            - redis
+            - postgres
+        ports:
+            - 9050:9000
+        environment:
+            SENTRY_SECRET_KEY: '!!SECRET!!'
+            SENTRY_POSTGRES_HOST: postgres
+            SENTRY_DB_USER: sentry
+            SENTRY_DB_PASSWORD: sentry
+            SENTRY_REDIS_HOST: redis
+
+    cron:
+        container_name: sentry-cron
+        image: sentry
+        links:
+            - redis
+            - postgres
+        command: "sentry run cron"
+        environment:
+            SENTRY_SECRET_KEY: '!!SECRET!!'
+            SENTRY_POSTGRES_HOST: postgres
+            SENTRY_DB_USER: sentry
+            SENTRY_DB_PASSWORD: sentry
+            SENTRY_REDIS_HOST: redis
+
+    worker:
+        container_name: sentry-worker
+        image: sentry
+        links:
+            - redis
+            - postgres
+        command: "sentry run worker"
+        environment:
+            SENTRY_SECRET_KEY: '!!SECRET!!'
+            SENTRY_POSTGRES_HOST: postgres
+            SENTRY_DB_USER: sentry
+            SENTRY_DB_PASSWORD: sentry
+            SENTRY_REDIS_HOST: redis
+
+volumes:
+    pgdb:
+
+networks:
+  default:
+    name: default_network
