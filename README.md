@@ -9,7 +9,7 @@ Custom Docker Compose files, build to my preference, for personally used self-ho
 ```bash
 9000-9019: Management services like Portainer
 9020-9049: Fixed application that will always run like Uptime Kuma
-9050-9099: Testing ports for random applications
+9050-9099: Testing ports for random applications 
 ```
 
 ### Default template
